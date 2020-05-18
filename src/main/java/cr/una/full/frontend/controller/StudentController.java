@@ -25,7 +25,6 @@ import cr.una.full.frontend.service.StudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,11 +35,11 @@ public class StudentController {
     private StudentService studentService = new StudentService();
 
     @GetMapping("/students")
-    public String studentList(Model model) {
+    public String students(Model model) {
         List<Student> studentList;
         studentList = studentService.loadAllStudents();
         model.addAttribute("studentList", studentList);
 
-        return "student-list";
+        return "students";
     }
 }
