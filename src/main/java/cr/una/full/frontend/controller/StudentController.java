@@ -26,7 +26,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +60,7 @@ public class StudentController {
         }
         model.addAttribute("studentList", studentList);
 
+        // Esta es la vista (students.html)
         return "students";
     }
 
@@ -91,6 +91,8 @@ public class StudentController {
         studentList = studentService.loadAllStudents();
         model.addAttribute("studentList", studentList);
         model.addAttribute("student", student);
+
+        // Esta es la vista (student.html)
         return "students";
     }
 }
