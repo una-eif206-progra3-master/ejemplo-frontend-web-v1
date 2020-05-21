@@ -25,8 +25,9 @@ import cr.una.full.frontend.model.Student;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,6 +41,27 @@ public class StudentService {
      */
     public StudentService() {
         client = ClientBuilder.newClient();
+    }
+    /**
+     * This method will load the information from JSON depending if the filter text
+     *
+     * @param searchTerm filter term
+     * @return the list of Students
+     */
+    public List<Student> searchStudentsByTerm(String searchTerm) {
+
+        List<Student> studentList = loadAllStudents();
+        List<Student> updatedStudentList = new ArrayList<Student>();
+
+        if (studentList != null && studentList.size() > 0) {
+            for (Student student : studentList) {
+                if (searchTerm != null && student.getName().equals(searchTerm)) {
+                    updatedStudentList.add(student);
+                }
+            }
+        }
+
+        return updatedStudentList;
     }
 
     /**
@@ -58,4 +80,12 @@ public class StudentService {
         return studentList;
     }
 
+    public Student saveStudent(Student student) {
+        Student studentSaved;
+
+        studentSaved = client.target(REST_URI).request(MediaType.APPLICATION_JSON).post(Entity.entity(student,
+                MediaType.APPLICATION_JSON), Student.class);
+
+        return studentSaved;
+    }
 }

@@ -23,37 +23,24 @@
       xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Student List</title>
+    <title>Student New</title>
 </head>
 <body>
 <div align="center">
-    <h1>Student List</h1>
-    <a href="/student-new">Create New Student</a>
-    <br/><br/>
-    <form action="#" th:action="@{/students}" method="post">
-        <label>Filter by: </label>
-        <input type="text" name="filterTxt" id="filterTxt" placeholder="Text to Filter">
-        <button type="submit">Save</button>
+    <h1>Add new Student</h1>
+    <form action="#"
+          th:action="@{/student-new}"
+          th:object="${student}"
+          method="post">
+        <label for="name">Name</label>
+        <input type="text" th:field="*{name}" id="name" placeholder="Name">
+        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <label for="course">Course</label>
+        <input type="text" th:field="*{course}" id="course" placeholder="Course">
+        <label for="rating">Rating</label>
+        <input type="text" th:field="*{rating}" id="rating" placeholder="Rating">
+        <input type="submit" value="Create Student">
     </form>
-    <br/>
-    <table border="1" cellpadding="10">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Course</th>
-            <th>Rating</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="student : ${studentList}">
-            <td th:text="${student.id}">Product ID</td>
-            <td th:text="${student.name}">Name</td>
-            <td th:text="${student.course}">Course</td>
-            <td th:text="${student.rating}">Rating</td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 </body>
 </html>

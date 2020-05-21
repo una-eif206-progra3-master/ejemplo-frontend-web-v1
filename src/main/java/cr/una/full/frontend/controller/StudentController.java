@@ -24,8 +24,12 @@ import cr.una.full.frontend.model.Student;
 import cr.una.full.frontend.service.StudentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -38,8 +42,55 @@ public class StudentController {
     public String students(Model model) {
         List<Student> studentList;
         studentList = studentService.loadAllStudents();
+
         model.addAttribute("studentList", studentList);
 
+        // Esta es la vista (students.html)
+        return "students";
+    }
+
+    @PostMapping("/students")
+    public String students(Model model, HttpServletRequest request) {
+        List<Student> studentList;
+        String filterTxt = request.getParameter("filterTxt");
+
+        if (filterTxt != "") {
+            studentList = studentService.searchStudentsByTerm(filterTxt);
+        } else {
+            studentList = studentService.loadAllStudents();
+        }
+        model.addAttribute("studentList", studentList);
+
+        return "students";
+    }
+
+    @GetMapping("/student-new")
+    public String addStudent(Model model) {
+        Student student = new Student();
+
+        model.addAttribute("student", student);
+
+        // Esta es la vista (student-new.html)
+        return "student-new";
+    }
+
+    @PostMapping("/student-new")
+    public String addStudent(Student _student, BindingResult result, Model model) {
+        List<Student> studentList;
+        Student student = null;
+        if (result.hasErrors()) {
+            return "student-new";
+        }
+
+        if (_student.getName() != "") {
+            student = studentService.saveStudent(_student);
+        } else {
+            student = new Student();
+        }
+
+        studentList = studentService.loadAllStudents();
+        model.addAttribute("studentList", studentList);
+        model.addAttribute("student", student);
         return "students";
     }
 }
